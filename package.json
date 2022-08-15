@@ -1,0 +1,10 @@
+{
+    "type": "module",
+    "dependencies": {
+        "@sanity/block-tools": "^2.29.3",
+        "@sanity/client": "^3.3.2",
+        "@sanity/schema": "^2.29.3",
+        "jsdom": "^20.0.0",
+        "node-fetch": "^3.2.9"
+    }
+}

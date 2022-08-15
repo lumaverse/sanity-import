@@ -1,0 +1,21 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Credentials
+credentials.js
+
+# Files with hardcoded URLs
+allBlogs.js
+brokenLinks.js
+validBlogs-*.js
+validBlogs.csv
+
+# Results from csv
+invalidBlogs.csv
+redirect-links.csv
+
+# Dependencies
+/node_modules
+
+# Random files
+Squarespace-Wordpress-Export-05-18-2022.xml
+Squarespace-Wordpress-Export-Single.xml
