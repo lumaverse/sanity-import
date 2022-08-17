@@ -24,8 +24,9 @@ client.delete({query: `*[_type == "blog" && slug.current != "test-1"]`}).then(co
 /* 
 // Test a blog or two
 const allBlogs = [
-	"https://blog.timetap.com/blog/class-session-registration-scheduling",
-]; */
+	"https://blog.timetap.com/blog/2017/3/24/conference-room-reservations-made-easy-for-office-tenants-heres-how",
+];
+ */
 
 // Grab the existing blog schema object
 const blockContentType = blogSchema
@@ -50,12 +51,13 @@ for (let i = 0; i < allBlogsLength; i++) {
 	// Send blog post to Sanity
 	const nextBlog = allBlogs.shift()
 	try {
-
+		
 		// Create the dictionary of redirects
 		await createDictionary(nextBlog);
 		
-		/* await sleep(
-			await fetch(`${allBlogs[i]}?format=json-pretty`)
+		// Send to Sanity
+		await sleep(
+			await fetch(`${nextBlog}?format=json-pretty`)
 				.then((res) => res.json())
 				.then(async (data) => {
 					console.log(data.item.title);
@@ -85,7 +87,7 @@ for (let i = 0; i < allBlogsLength; i++) {
 					// Create the posts
 					await createBlogPatchAuthImages(authBlogImg);
 				})
-		); */
+		);
 	} catch (err) {
 		console.error(err);
 
