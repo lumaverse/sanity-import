@@ -14,50 +14,35 @@ const client = sanityClient({
 	useCDN: false, // use true if you want optimized speeds with cached data
 });
 
-// Change slugs for array of posts to new ones from Steven
 const slugsCsv = "./slugs-to-change.csv";
+
+// Change slugs for array of posts to new ones from Steven
 const query = `*[_type == "blog" && slug.current == $slugParam][0] {
     _id
   }`;
-const urlArr = [];
 
-function timeout(ms) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-async function sleep(fn, ...args) {
-	await timeout(7000);
-	return await fn(...args);
-}
-
-const rstream = fs.createReadStream(slugsCsv).pipe(csv());
-rstream.on("data", async (data) => {
-	if (data) {
-		// Send blog post to Sanity
+fs.createReadStream(slugsCsv)
+	.pipe(csv())
+	.on("data", (data) => {
 		const params = { slugParam: data.from };
 		const newSlug = data.to;
-		try {
-			client
-				.fetch(query, params)
-				.then(async (postId) => {
-					return postId ? postId._id : "";
-				})
-				.then((postId) => {
-					client
-						.patch(postId)
-						.set({
-							slug: {
-								_type: "slug",
-								current: newSlug,
-							},
-						})
-						.commit();
-				});
-		} catch (err) {
-			console.error(err);
-		}
-	} else {
-		console.log(`bad: ${data}`);
-	}
-});
+
+		client
+			.fetch(query, params)
+			.then((postId) => {
+				return postId ? postId._id : "";
+			})
+			.then((postId) => {
+				client
+					.patch(postId)
+					.set({
+						slug: {
+							_type: "slug",
+							current: newSlug,
+						},
+					})
+					.commit();
+			});
+	});
 
 // Create redirects for the same array of posts from date slugs to new slugs
