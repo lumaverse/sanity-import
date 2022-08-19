@@ -8,6 +8,7 @@ allBlogs.js
 brokenLinks.js
 validBlogs-*.js
 validBlogs.csv
+*.csv
 
 # Results from csv
 invalidBlogs.csv
