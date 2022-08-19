@@ -46,7 +46,7 @@ fs.createReadStream(slugsCsv)
 			});
 	});
  */
-
+/* 
 // Create redirects for the same array of posts from date slugs to new slugs
 
 fs.createReadStream(slugsCsv)
@@ -68,8 +68,21 @@ fs.createReadStream(slugsCsv)
 			.commit();
 
 		// Delete all appended redirects
-		/* client
+		client
 			.patch("redirects")
 			.unset([`redirectList[_key=="sqsp-redirect-${data.to}"]`])
-			.commit(); */
+			.commit();
 	});
+ */
+/* 
+// Create new CSV of all post titles for CG
+const postTitles = await client.fetch(
+`*[_type == "blog"]{title}`
+);
+postTitles.forEach(({title}) => {
+    fs.appendFile("all-blog-titles.csv", `${title},\n`, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}) */
