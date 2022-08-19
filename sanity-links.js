@@ -14,8 +14,9 @@ const client = sanityClient({
 	useCDN: false, // use true if you want optimized speeds with cached data
 });
 
-const slugsCsv = "./slugs-to-change.csv";
+const slugsCsv = "./slugs-to-redirect.csv";
 
+/* 
 // Change slugs for array of posts to new ones from Steven
 const query = `*[_type == "blog" && slug.current == $slugParam][0] {
     _id
@@ -44,5 +45,31 @@ fs.createReadStream(slugsCsv)
 					.commit();
 			});
 	});
+ */
 
 // Create redirects for the same array of posts from date slugs to new slugs
+
+fs.createReadStream(slugsCsv)
+	.pipe(csv())
+	.on("data", (data) => {
+		const newRedirect = {
+			_key: `sqsp-redirect-${data.to}`,
+			_type: "redirect",
+			destination: `/posts/${data.to}`,
+			source: `/posts/${data.from}`,
+			permanent: true,
+		};
+
+		// Append new redirects
+		client
+			.patch("redirects")
+			.setIfMissing({ redirectList: [] })
+			.append("redirectList", [newRedirect])
+			.commit();
+
+		// Delete all appended redirects
+		/* client
+			.patch("redirects")
+			.unset([`redirectList[_key=="sqsp-redirect-${data.to}"]`])
+			.commit(); */
+	});
