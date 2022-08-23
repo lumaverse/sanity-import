@@ -46,7 +46,8 @@ fs.createReadStream(slugsCsv)
 			});
 	});
  */
-/* 
+
+
 // Create redirects for the same array of posts from date slugs to new slugs
 
 fs.createReadStream(slugsCsv)
@@ -55,8 +56,8 @@ fs.createReadStream(slugsCsv)
 		const newRedirect = {
 			_key: `sqsp-redirect-${data.to}`,
 			_type: "redirect",
-			destination: `/posts/${data.to}`,
-			source: `/posts/${data.from}`,
+			destination: `/blog/posts/${data.to}`,
+			source: `/blog/posts/${data.from}`,
 			permanent: true,
 		};
 
@@ -67,13 +68,13 @@ fs.createReadStream(slugsCsv)
 			.append("redirectList", [newRedirect])
 			.commit();
 
-		// Delete all appended redirects
+		/* // Delete all appended redirects
 		client
 			.patch("redirects")
 			.unset([`redirectList[_key=="sqsp-redirect-${data.to}"]`])
-			.commit();
+			.commit(); */
 	});
- */
+
 /* 
 // Create new CSV of all post titles for CG
 const postTitles = await client.fetch(
