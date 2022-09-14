@@ -56,9 +56,10 @@ fs.createReadStream(slugsCsv)
 		const newRedirect = {
 			_key: `sqsp-redirect-${data.to}`,
 			_type: "redirect",
-			destination: `/blog/posts/${data.to}`,
-			source: `/blog/posts/${data.from}`,
+			destination: `https://timetap.com/blog/posts/${data.to}`,
+			source: `/${data.from}`,
 			permanent: true,
+			basePath: false,
 		};
 
 		// Append new redirects
@@ -67,7 +68,7 @@ fs.createReadStream(slugsCsv)
 			.setIfMissing({ redirectList: [] })
 			.append("redirectList", [newRedirect])
 			.commit();
-
+			
 		/* // Delete all appended redirects
 		client
 			.patch("redirects")
