@@ -14,31 +14,34 @@ const client = sanityClient({
 });
 
 const slugsCsv = "./slugs-to-redirect.csv";
+const redirectArr = [];
 
 // Create redirects for the same array of posts from date slugs to new slugs
-
 fs.createReadStream(slugsCsv)
 	.pipe(csv())
-	.on("data", (data) => {
-		const newRedirect = {
-			_key: `sqsp-redirect-${data.to}`,
-			_type: "redirect",
-			destination: `https://timetap.com/blog/posts/${data.to}`,
-			source: `/${data.from}`,
-			permanent: true,
-			basePath: false,
-		};
+	.on("data", (line) => {
+		// Iterating over lines of data from the CSV
+		const key = line.to.split("/posts/")[1];
+		const source = line.from.split(".com/blog")[1];
+		const destination = line.to;
 
-		// Append new redirects
+		redirectArr.push({
+			_key: `sqsp-redirect-${key}`,
+			_type: "redirect",
+			basePath: false,
+			destination: destination,
+			permanent: true,
+			source: source,
+		});
+	})
+	.on("end", () => {
+		// After streaming, push redirects as a batch to Sanity
 		client
 			.patch("redirects")
 			.setIfMissing({ redirectList: [] })
-			.append("redirectList", [newRedirect])
+			.append("redirectList", redirectArr)
 			.commit();
-			
-		/* // Delete all appended redirects
-		client
-			.patch("redirects")
-			.unset([`redirectList[_key=="sqsp-redirect-${data.to}"]`])
-			.commit(); */
 	});
+
+/* // Delete all appended redirects
+client.patch("redirects").unset([`redirectList`]).commit(); */
