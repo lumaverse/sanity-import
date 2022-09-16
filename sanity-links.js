@@ -22,7 +22,7 @@ fs.createReadStream(slugsCsv)
 	.on("data", (line) => {
 		// Iterating over lines of data from the CSV
 		const key = line.to.split("/posts/")[1];
-		const source = line.from.split(".com/blog")[1];
+		const source = line.from.split(".com")[1];
 		const destination = line.to;
 
 		redirectArr.push({
@@ -44,4 +44,5 @@ fs.createReadStream(slugsCsv)
 	});
 
 /* // Delete all appended redirects
-client.patch("redirects").unset([`redirectList`]).commit(); */
+client.patch("redirects").unset([`redirectList`]).commit();
+ */
